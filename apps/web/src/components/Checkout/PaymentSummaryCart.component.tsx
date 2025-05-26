@@ -1,4 +1,3 @@
-import { useShipping } from '@/context/shippingContext';
 import { countCartTotalPrice } from '@/helper/cart/cart.helper';
 import {
   totalAfterDiscount,
