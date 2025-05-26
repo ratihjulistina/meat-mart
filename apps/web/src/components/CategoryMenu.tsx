@@ -10,7 +10,6 @@ import 'swiper/css/navigation';
 import 'swiper/css/scrollbar';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { meatCategories } from '@/data/categories';
 import { IGetCategories } from '@/interface/product/category.interface';
 import { api } from '@/helper/api';
 
