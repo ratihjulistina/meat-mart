@@ -56,8 +56,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             last_name: decoded.last_name,
             image_url: decoded.image_url,
           };
-        } catch (error: unknown) {
-          throw new InvalidAuthError(error);
+        } catch (error: any) {
+          let errorMessage = 'Authentication failed';
+          try {
+            const errorData = JSON.parse(error.message);
+            errorMessage = errorData.message;
+          } catch {
+            errorMessage = error.message;
+          }
+
+          throw new Error(errorMessage);
         }
       },
     }),
@@ -98,7 +106,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return true;
         } catch (error) {
           console.error('Google registration error:', error);
-          return false;
+          return `/login?error=${encodeURIComponent('Google login failed')}`;
         }
       }
 

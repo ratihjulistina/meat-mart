@@ -36,8 +36,10 @@ export default function Page() {
           setOpenSnackbar(true);
           router.push('/');
         }
-      } catch (error) {
-        setErrMessage('An unexpected error occurred');
+      } catch (error: any) {
+        setErrMessage(
+          error.message || 'An unexpected error occurred. Please try again.',
+        );
       } finally {
         setIsLoading({ ...isLoading, regular: false });
       }
@@ -50,17 +52,15 @@ export default function Page() {
       setErrMessage('');
 
       const result = await signIn('google', {
-        redirect: true,
-        callbackUrl: '/', //session?.user?.role === 'CUSTOMER' ? '/' : '/dashboard',
+        redirect: false,
+        callbackUrl: '/',
       });
 
-      // const result: SignInResponse = await googleLogin();
-
-      // if (result?.error) {
-      //   setErrMessage(result.error);
-      // } else if (result?.url) {
-      //   router.push(result.url);
-      // }
+      if (result?.error) {
+        setErrMessage(result.error);
+      } else if (result?.url) {
+        router.push(result.url);
+      }
     } catch (error) {
       setErrMessage('Failed to login with Google');
     } finally {

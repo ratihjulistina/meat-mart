@@ -40,10 +40,10 @@ export const ProductList = () => {
         `products/from-nearest-store?lat=${lat}&lng=${lng}&page=${page}&limit=10`,
       );
       const data = await response.json();
-
+      console.log('PRODUCT DATA======', data);
       if (data.data) {
         setProductData(data.data.data);
-        //   console.log('PRODUCT DATA======', setProductData);
+
         setTotalPages(Math.ceil(data.data.total / 10));
         setNearestStore(data.data.store);
       }

@@ -120,14 +120,27 @@ export function Card({ product }: { product: IProduct }) {
                 {product.finalPrice ? (
                   <>
                     {' '}
-                    <Image
-                      width={60}
-                      height={60}
-                      alt=""
-                      className={`w-[45px] h-[45px] absolute right-[15%] top-[10%] 
-                    ${product.availableStocks[0].quantity === 0 ? 'block' : 'hidden'}`}
-                      src="/sold-icon.png"
-                    />
+                    {product.availableStocks.length !== 0 ? (
+                      <Image
+                        width={60}
+                        height={60}
+                        alt=""
+                        className={`w-[45px] h-[45px] absolute right-[15%] top-[10%] 
+                    ${product.availableStocks[0].stores.status === 'BRANCH' && product.availableStocks[0].quantity === 0 ? 'block' : 'hidden'}`}
+                        src="/sold-icon.png"
+                      />
+                    ) : (
+                      <>
+                        <Image
+                          width={60}
+                          height={60}
+                          alt=""
+                          className={`w-[45px] h-[45px] absolute right-[15%] top-[10%] 
+                    `}
+                          src="/sold-icon.png"
+                        />
+                      </>
+                    )}
                   </>
                 ) : (
                   <>

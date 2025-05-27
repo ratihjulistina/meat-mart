@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { meatCategories } from '@/data/categories';
 import Link from 'next/link';
 import { Card } from './Card';
 import { IProduct } from '@/interface/product/product.interface';

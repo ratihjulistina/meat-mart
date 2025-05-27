@@ -11,8 +11,14 @@ export const login = async (credentials: Partial<Record<string, unknown>>) => {
       body: credentials,
       contentType: 'application/json',
     });
+
     if (!res.data?.access_token || !res.data?.refresh_token) {
-      throw new Error('Invalid login response');
+      throw new Error(
+        JSON.stringify({
+          message: 'Invalid login response: Missing tokens',
+          code: 500,
+        }),
+      );
     }
 
     return {
@@ -21,8 +27,25 @@ export const login = async (credentials: Partial<Record<string, unknown>>) => {
     };
   } catch (error) {
     console.error('Login error:', error);
+
+    let errorMessage = 'Authentication failed';
+    let errorCode = 500;
+
+    if (error instanceof Error) {
+      try {
+        const errorData = JSON.parse(error.message);
+        errorMessage = errorData.message;
+        errorCode = errorData.code || errorCode;
+      } catch {
+        errorMessage = error.message;
+      }
+    }
+
     throw new Error(
-      error instanceof Error ? error.message : 'Authentication failed',
+      JSON.stringify({
+        message: errorMessage,
+        code: errorCode,
+      }),
     );
   }
 };
@@ -187,10 +210,29 @@ export async function registerSocialUser(data: {
       body: data,
       contentType: 'application/json',
     });
-    console.log(res.data);
-    return res.data;
+
+    if (!res.data?.access_token || !res.data?.refresh_token) {
+      throw new Error('Invalid social login response');
+    }
+
+    return {
+      user: {
+        email: data.email,
+        first_name: data.fullName.split(' ')[0],
+        last_name: data.fullName.split(' ')[1] || '',
+        image_url: data.image,
+        provider: data.provider,
+        is_verified: true,
+        role: 'CUSTOMER',
+      },
+      accessToken: res.data.access_token,
+      refreshToken: res.data.refresh_token,
+    };
   } catch (error) {
-    console.log('Error UPDATE PROFILE', error);
+    console.error('Social registration error:', error);
+    throw new Error(
+      error instanceof Error ? error.message : 'Social registration failed',
+    );
   }
 }
 

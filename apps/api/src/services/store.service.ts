@@ -235,10 +235,10 @@ class StoreService {
       data: { deleted_at: new Date() },
     });
 
-
     const remainingStore = await prisma.stores.findMany({
       where: { deleted_at: null },
-      
+    });
+
     await prisma.stocks.updateMany({
       where: { store_id: req.params.id },
       data: { deleted_at: new Date() },
