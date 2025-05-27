@@ -30,6 +30,15 @@ export const ProductList = () => {
     try {
       const lastCoords = localStorage.getItem('lastCoords');
       if (!lastCoords) {
+        const response = await getProductBasedLoc(
+          `products/from-nearest-store?lat=${`-6.1754024`}&lng=${`106.8271691649727`}&page=${page}&limit=10`,
+        );
+        const data = await response.json();
+        setProductData(data.data.data);
+
+        setTotalPages(Math.ceil(data.data.total / 10));
+        setNearestStore(data.data.store);
+
         console.log('No coordinates found');
         return;
       }
@@ -42,6 +51,15 @@ export const ProductList = () => {
       const data = await response.json();
       console.log('PRODUCT DATA======', data);
       if (data.data) {
+        setProductData(data.data.data);
+
+        setTotalPages(Math.ceil(data.data.total / 10));
+        setNearestStore(data.data.store);
+      } else {
+        const response = await getProductBasedLoc(
+          `products/from-nearest-store?lat=${`-6.1754024`}&lng=${`106.8271691649727`}&page=${page}&limit=10`,
+        );
+        const data = await response.json();
         setProductData(data.data.data);
 
         setTotalPages(Math.ceil(data.data.total / 10));

@@ -75,7 +75,10 @@ export default function Categories() {
                 >
                   <span className="text-2xl md:text-4xl pt-2 rounded-full w-12 h-12 md:w-16 md:h-16 bg-primaryBackground">
                     <Image
-                      src={`/categories/${category.name.toLowerCase()}.png`}
+                      src={
+                        `/categories/${category.name.toLowerCase()}.png` ||
+                        '/templateproduct.png'
+                      }
                       alt={category.name}
                       width={48}
                       height={48}
